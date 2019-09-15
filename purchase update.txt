@@ -1,0 +1,204 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Data.SqlClient;
+using System.Data;
+
+public partial class Store : System.Web.UI.Page
+{
+    //connection to the database 
+    static SqlConnection sqlconnection = new SqlConnection(@"Data Source=SQL5045.site4now.net;Initial Catalog=DB_A4D736_uj2019;User Id=DB_A4D736_uj2019_admin;Password=rommel123456;");
+   
+    //sql commande variable 
+    SqlCommand cmd;
+
+    //sql adatpter variable 
+    SqlDataAdapter da;
+
+    //data set variable 
+    DataSet ds;
+
+    //check user session
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        if (Session["user"] == null)
+        {
+            Response.Redirect("Login.aspx");
+        }
+        else if (!IsPostBack)
+        {
+            filldropdownlist();
+            FillGridView();
+        }
+
+
+    }
+
+
+    protected void filldropdownlist()
+    {
+        //check connection state. if closed, open it 
+        if (sqlconnection.State == ConnectionState.Closed)
+            sqlconnection.Open();
+        
+        
+        //Product drop down list
+        string productquery = "SELECT ProductId,ProductName FROM Product";
+        cmd = new SqlCommand(productquery, sqlconnection);
+        da = new SqlDataAdapter(cmd);
+        ds = new DataSet();
+        da.Fill(ds, "product");
+        DropDownProduct.DataSource = ds.Tables["product"];
+        DropDownProduct.DataTextField = "ProductName";
+        DropDownProduct.DataValueField = "ProductId";
+        DropDownProduct.DataBind();
+
+        /*
+         * SUpliers list
+         * with select event
+         */
+            string supplierquery = "SELECT SupplierId,CompanyName FROM Supplier";
+            cmd = new SqlCommand(supplierquery, sqlconnection);
+            da = new SqlDataAdapter(cmd);
+            ds = new DataSet();
+            da.Fill(ds, "supplier");
+            DropDownSupplier.DataSource = ds.Tables["supplier"];
+            DropDownSupplier.DataTextField = "CompanyName";
+            DropDownSupplier.DataValueField = "SupplierId";
+            DropDownSupplier.DataBind();
+
+        ///close connection
+        sqlconnection.Close();
+
+
+    }
+
+   
+    //Event to save for any purchase of product by user and update gridview
+    protected void btnsave_Click(object sender, EventArgs e)
+    {
+       //check connection. .if closed, open it 
+        if (sqlconnection.State == ConnectionState.Closed)
+            sqlconnection.Open();
+
+        //command to create or update any purchase by executing the appropriate sql proocedure
+        SqlCommand sqlcmd = new SqlCommand("PurchaseCreateOrUpdate", sqlconnection);
+        sqlcmd.CommandType = CommandType.StoredProcedure;
+        sqlcmd.Parameters.AddWithValue("@PurchaseId", hfPurchaseId.Value == "" ? 0 : Convert.ToInt32(hfPurchaseId.Value));
+        sqlcmd.Parameters.AddWithValue("@ProductId", Convert.ToInt32(DropDownProduct.SelectedValue));
+        sqlcmd.Parameters.AddWithValue("@SupplierId", Convert.ToInt32(DropDownSupplier.SelectedValue));
+        sqlcmd.Parameters.AddWithValue("@Quantity", Convert.ToInt32(txtQuantity.Text.Trim()));
+        sqlcmd.Parameters.AddWithValue("@Others", txtOthers.Text);
+        sqlcmd.ExecuteNonQuery();
+        sqlconnection.Close();
+        string PurchaseId = hfPurchaseId.Value;
+        
+
+        if (PurchaseId == "")
+            lblsuccessmassage.Text = "Saved Successfully";
+        else
+            lblsuccessmassage.Text = "Updated Successfully";
+        FillGridView();
+        clear();
+        DropDownProduct.ClearSelection();
+        DropDownSupplier.ClearSelection();
+
+
+    }
+
+    //function to fill up the gridview
+    void FillGridView()
+    {
+        if (sqlconnection.State == ConnectionState.Closed)
+            sqlconnection.Open();
+        
+
+        SqlDataAdapter sqlDa = new SqlDataAdapter("ViewPurchaseGrid", sqlconnection);
+        sqlDa.SelectCommand.CommandType = CommandType.StoredProcedure;
+        DataTable dtbl = new DataTable();
+        sqlDa.Fill(dtbl);
+        sqlconnection.Close();
+        purchaseGrid.DataSource = dtbl;
+        purchaseGrid.DataBind();
+
+    }
+
+    //Event to delete any purchase 
+    protected void btndelete_Click(object sender, EventArgs e)
+    {
+        if (sqlconnection.State == ConnectionState.Closed)
+            sqlconnection.Open();
+        SqlCommand cmd = new SqlCommand("PurchaseDeleteById", sqlconnection);
+        cmd.CommandType = CommandType.StoredProcedure;
+        cmd.Parameters.AddWithValue("@PurchaseId", Convert.ToInt32(hfPurchaseId.Value));
+        cmd.ExecuteNonQuery();
+        sqlconnection.Close();
+        hfPurchaseId.Value = "";
+        txtQuantity.Text = txtOthers.Text = "";
+        DropDownProduct.ClearSelection();
+        DropDownSupplier.ClearSelection();
+        FillGridView();
+        lblsuccessmassage.Text=("Delete Successfully!");
+
+    }
+
+    //event to clear fileds 
+    protected void btnclear_Click(object sender, EventArgs e)
+    {
+        this.clear();
+    }
+
+    //function that clears all the fields 
+    public void clear()
+    {
+        hfPurchaseId.Value = "";
+        txtQuantity.Text = txtOthers.Text= "";
+        DropDownProduct.ClearSelection();
+        DropDownSupplier.ClearSelection();
+        
+        lblerrormessage.Text = lblsuccessmassage.Text = "";
+        btnsave.Text = "Save";
+        btndelete.Enabled = true;
+
+    }
+
+    //event to select a given purchase and filled the fields with the purchase details
+    //
+    protected void lnk_onClick(object sender, EventArgs e)
+    {
+        int PurchaseId = Convert.ToInt32((sender as LinkButton).CommandArgument);
+        if (sqlconnection.State == ConnectionState.Closed)
+            sqlconnection.Open();
+        SqlDataAdapter sqlDa = new SqlDataAdapter("PurchaseViewById", sqlconnection);
+        sqlDa.SelectCommand.CommandType = CommandType.StoredProcedure;
+        sqlDa.SelectCommand.Parameters.AddWithValue("@PurchaseId", PurchaseId);
+        DataTable dtbl = new DataTable();
+        sqlDa.Fill(dtbl);
+        sqlconnection.Close();
+        hfPurchaseId.Value = PurchaseId.ToString();
+        DropDownProduct.SelectedItem.Text = dtbl.Rows[0]["ProductName"].ToString();
+        DropDownSupplier.SelectedItem.Text = dtbl.Rows[0]["CompanyName"].ToString();
+        txtQuantity.Text = dtbl.Rows[0]["Quantity"].ToString();
+        txtOthers.Text = dtbl.Rows[0]["Others"].ToString();
+        btnsave.Text = "Update";
+        btndelete.Enabled = true;
+
+
+    }
+
+    protected void purchaseGrid_SelectedIndexChanged(object sender, EventArgs e)
+    {
+
+    }
+    protected void DropDownProduct_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        
+    }
+    protected void DropDownSupplier_SelectedIndexChanged(object sender, EventArgs e)
+    {
+
+    }
+}
