@@ -1,0 +1,77 @@
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Data;
+using System.Threading.Tasks;
+
+public partial class Register : System.Web.UI.Page
+{
+    static SqlConnection sqlcon = new SqlConnection(@"Data Source=SQL5045.site4now.net;Initial Catalog=DB_A4D736_uj2019;User Id=DB_A4D736_uj2019_admin;Password=rommel123456;");
+
+    protected void Page_Load(object sender, EventArgs e)
+    {
+       
+
+    } // To check sql procedure in smarterASP online
+
+
+    protected void btnRegister_Click(object sender, EventArgs e)
+    {
+        
+
+        if (string.IsNullOrEmpty(txtRegUser.Text))
+        {
+            lblError.Text = "Please enter a username";
+            return;
+        }
+
+        if (string.IsNullOrEmpty(txtRegPassword.Text))
+        {
+            lblError.Text = "Please enter a password";
+            return;
+        }
+
+        try
+        {
+            if (sqlcon.State == ConnectionState.Closed)
+                sqlcon.Open();
+            SqlCommand sqlcmd = new SqlCommand("RegisterUser", sqlcon);
+            sqlcmd.CommandType = CommandType.StoredProcedure;
+            sqlcmd.Parameters.AddWithValue("@UserName", txtRegUser.Text.Trim());
+            sqlcmd.Parameters.AddWithValue("@Password", txtRegPassword.Text.Trim());
+            sqlcmd.ExecuteNonQuery();
+            sqlcon.Close();
+
+    }catch(Exception ex)
+        {
+            lblError.Text = "An error occured while connecting to the database";
+            Console.WriteLine("ERROR REGISTER " + ex.Message);
+            return;
+        }
+
+        lblError.Text = "";
+
+        lblSuccess.Text = "You have successfully registered...Please wait while we redirect you to login";
+       
+        System.Threading.Thread.Sleep(4000);
+
+        Response.Redirect("Login.aspx");
+
+
+    }
+
+    protected void txtRegUser_TextChanged(object sender, EventArgs e)
+    {
+        lblError.Text = "";
+    }
+
+    protected void txtRegPassword_TextChanged(object sender, EventArgs e)
+    {
+        lblError.Text = "";
+    }
+}
+//}
