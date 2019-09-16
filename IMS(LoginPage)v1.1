@@ -1,0 +1,114 @@
+<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="Login.aspx.cs" Inherits="Login" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
+    <style type="text/css">
+        body {font-family: Arial, Helvetica, sans-serif;}
+form {border: 1px solid #f1f1f1;}
+
+input[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+.cancelbtn {
+  width: auto;
+  padding: 10px 18px;
+  background-color: #f44336;
+}
+
+.imgcontainer {
+  text-align: center;
+  margin: 24px 0 12px 0;
+}
+
+img.avatar {
+  width: 40%;
+  border-radius: 50%;
+}
+
+.container {
+  padding: 16px;
+}
+
+span.psw {
+  float: right;
+  padding-top: 16px;
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 300px) {
+  span.psw {
+     display: block;
+     float: none;
+  }
+  .cancelbtn {
+     width: 100%;
+  }
+}
+    </style>
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
+    
+    <div class="bg-white p-6 mx-auto border bd-default win-shadow cell-md-4 pos-fixed pos-center"> 
+       
+        <div class="auto-style42">
+            <h3 class=" text-bold text-cap"> Login </h3>
+        </div>
+
+        <div class="container ">
+            <label for="uname"><b> Username</b></label>
+            <asp:TextBox  ID="txtUserName" placeholder="Enter Username" runat="server">
+
+            </asp:TextBox>
+            
+            
+
+
+            <label for="psw"><b> Password</b></label>
+            <asp:TextBox ID="txtPassword" placeholder="Enter Password" TextMode="Password" runat="server"></asp:TextBox>
+
+            
+        
+            <asp:Button ID="btnLogin" CssClass="button success rounded pos-bottom-center w-100 mt-2"  runat="server"  Text="Login" OnClick="btnLogin_Click" />
+           <div>
+           <asp:Label ID="lblerror" runat="server" ForeColor="#CC0000"></asp:Label>
+
+               <p>
+                   <label class="text-small flex-align-center">Don't have an account yet? <span><a href="Register.aspx">click here</a> to register</span></label>
+               </p>
+                 
+               <input class="mt-3 place-right"  type="checkbox" data-role="checkbox" data-caption="Remember Me"  data-caption-position="left" />
+
+
+           </div>
+
+        </div>
+
+       <div class="container" style="background-color:white">
+                           
+           <asp:Button CssClass="button secondary outline pos-center" ID="btnRefresh" runat="server" Text="Refresh" OnClick="btnRefresh_Click" />
+
+       </div>
+              
+       </div>
+           
+</asp:Content>
+
