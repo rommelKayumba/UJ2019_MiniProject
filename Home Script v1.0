@@ -1,0 +1,8 @@
+$(document).ready(function () {
+
+    $("#btnProduct").click(function () { goToProduct(); });
+	});
+	function goToProduct() {
+
+    window.location.href = 'Product.aspx';
+}
