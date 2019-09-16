@@ -1,0 +1,115 @@
+<%@ Page Title="Home" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="Home.aspx.cs" Inherits="Home" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="Head" runat="Server">
+    <style>
+        .container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+        }
+
+            .container img {
+                width: 100%;
+                height: auto;
+            }
+
+
+        .button {
+            background-color: #006699;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 20px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+
+
+        .container .btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            background-color: #555;
+            color: white;
+            font-size: 16px;
+            padding: 12px 24px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+            .container .btn:hover {
+                background-color: black;
+            }
+    </style>
+    <script src="App_Scripts/Home.js"></script>
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
+
+    <div class="row ml-3 pos-center pos-fixed">
+
+        <div class="tiles-grid tiles-group size-2">
+
+            <div class="bg-blue" data-role="tile" data-size="medium" data-effect="hover-slide-left" id="btnProduct">
+                <div class="slide-front d-flex flex-justify-center flex-align-center p-4 op-mauve">
+                    <span class="icon mif-apps"></span>
+                </div>
+                <div class="slide-back d-flex flex-justify-center flex-align-center p-4 op-mauve">
+                    <p class="text-center">
+                        View your products
+                    </p>
+                </div>
+                <span class="branding-bar">Products</span>
+            </div>
+
+            <div class="bg-amazon" data-role="tile" data-size="medium" data-effect="hover-slide-left" id="btnSupplier">
+                <div class="slide-front d-flex flex-justify-center flex-align-center p-4 op-mauve">
+                    <span class="icon mif-truck"></span>
+                </div>
+                <div class="slide-back d-flex flex-justify-center flex-align-center p-4 op-mauve">
+                    <p class="text-center">
+                        View your Suppliers
+                    </p>
+                </div>
+                <span class="branding-bar">Supplier</span>
+            </div>
+
+            <div class="bg-amber" data-role="tile" data-size="medium" data-effect="hover-slide-left" id="btnPurchase">
+                <div class="slide-front d-flex flex-justify-center flex-align-center p-4 op-mauve">
+                    <span class="icon mif-cart"></span>
+                </div>
+                <div class="slide-back d-flex flex-justify-center flex-align-center p-4 op-mauve">
+                    <p class="text-center">
+                        View your purchases
+                    </p>
+                </div>
+                <span class="branding-bar">Purchases</span>
+            </div>
+
+            <div class="bg-green" data-role="tile" data-size="medium" data-effect="hover-slide-left" id ="btnSales">
+                <div class="slide-front d-flex flex-justify-center flex-align-center p-4 op-mauve">
+                    <span class="icon mif-money"></span>
+                </div>
+                <div class="slide-back d-flex flex-justify-center flex-align-center p-4 op-mauve">
+                    <p class="text-center">
+                        View your Sales
+                    </p>
+                </div>
+                <span class="branding-bar">Sales</span>
+            </div>
+
+        </div>
+
+
+
+
+    </div>
+</asp:Content>
+
