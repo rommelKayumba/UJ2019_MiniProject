@@ -1,0 +1,132 @@
+<%@ Page Title="Purchase" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="Purchase.aspx.cs" Inherits="Store" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
+       <style type="text/css">
+    .auto-style41 {
+        text-align: center;
+    }
+    .auto-style42 {
+        width: 100%;
+    }
+    .auto-style43 {
+            text-align: right;
+            width: 608px;
+        }
+    .auto-style44 {
+        text-align: left;
+    }
+        .auto-style46 {
+        text-align: right;
+        width: 571px;
+    }
+    .auto-style49 {
+        text-align: center;
+        width: 11px;
+    }
+    .auto-style50 {
+        text-align: center;
+        width: 73px;
+    }
+        .auto-style51 {
+            text-align: center;
+        }
+        .auto-style52 {
+            color: #003399;
+        }
+           .auto-style53 {
+               margin-left: 0px;
+           }
+    </style>
+</asp:Content>
+
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
+
+    <div class="row">
+        <div class="float-left">
+            
+  <div class="bg-white p-6 mx-auto border bd-default win-shadow cell mt-4 ml-8-xl">
+    <h3 class="text-bold text-cap">Purchase</h3>
+        <asp:HiddenField ID="hfPurchaseId" runat="server" />
+
+  <div class="container">
+    <div>
+        <div>
+                <label for="uname"><b>Product Name</b></label>
+                <asp:DropDownList ID="DropDownProduct" runat="server" AppendDataBoundItems="True"  OnSelectedIndexChanged="DropDownProduct_SelectedIndexChanged">
+                    
+                </asp:DropDownList>
+        </div>
+         
+        
+        <div>
+             <label for="uname"><b>Supplier Name</b></label>
+            <asp:DropDownList ID="DropDownSupplier" runat="server" AppendDataBoundItems="True" OnSelectedIndexChanged="DropDownSupplier_SelectedIndexChanged">
+                    
+                </asp:DropDownList>
+        </div>
+            
+              
+          <div>
+                <label for="uname"><b>Quantity</b></label>
+                <asp:TextBox ID="txtQuantity" runat="server" onkeydown="return (!(event.keyCode>=65) && event.keyCode!=32);"></asp:TextBox>
+
+          </div>
+            
+        <div>
+                 <label for="uname"><b>Other Descritptions</b></label>
+                <asp:TextBox ID="txtOthers" runat="server"></asp:TextBox>
+             
+        </div>
+        
+        <div>
+                <asp:Button ID="btnsave" CssClass="button success w-30 mt-2 mr-2" runat="server" Text="Save" Font-Bold="True" OnClick="btnsave_Click" />
+                <asp:Button ID="btndelete" Cssclass=" button alert w-30 mt-2 " runat="server" Text="Delete" Font-Bold="True" OnClick="btndelete_Click" />
+                <asp:Button ID="btnclear" CssClass="button secondary w-30 mt-2 ml-2" runat="server" Text="Clear" Font-Bold="True" OnClick="btnclear_Click" />
+             
+        </div>
+        
+                <asp:Label ID="lblsuccessmassage" runat="server" Text="" ForeColor="Green"></asp:Label>
+                <asp:Label ID="lblerrormessage" runat="server" Text="" ForeColor="Red"></asp:Label>
+    </div>
+      </div>
+      </div>
+        </div>
+        <div class="float-right">
+              <div class="bg-white p-6 mx-auto border bd-default win-shadow cell w-60 position-bottom mt-4 ml-8-xl">
+        <h3 class="text-bold text-cap"> Purchase List </h3>
+        <div class="auto-style51">
+        <asp:GridView ID="purchaseGrid" CssClass="table" runat="server" AutoGenerateColumns="False" HorizontalAlign="Center" OnSelectedIndexChanged="purchaseGrid_SelectedIndexChanged" CellPadding="4" ForeColor="#333333" GridLines="None" Height="171px" Width="530px">
+            <AlternatingRowStyle BackColor="White" />
+            <columns>
+                <asp:BoundField Datafield="PurchaseId" HeaderText="Purchase Id" />
+                <asp:BoundField Datafield="ProductName" HeaderText="Product Name" />
+                <asp:BoundField Datafield="CompanyName" HeaderText="Supplier Name" />
+                <asp:BoundField Datafield="Quantity" HeaderText="Quantity" />
+                <asp:BoundField DataField="Others" HeaderText="Others" />
+                <asp:TemplateField> 
+                    <ItemTemplate>
+                        <asp:LinkButton CssClass="button outline primary" ID="lnkView" runat="server" CommandArgument='<%# Eval("PurchaseId") %>' OnClick="lnk_onClick">Select</asp:LinkButton>
+                    </ItemTemplate>
+                </asp:TemplateField>
+            </columns>
+            <EditRowStyle BackColor="#7C6F57" />
+            <FooterStyle BackColor="#1C5E55" Font-Bold="True" ForeColor="White" />
+            <HeaderStyle BackColor="Green" Font-Bold="True" ForeColor="White" />
+            <PagerStyle BackColor="#666666" ForeColor="White" HorizontalAlign="Center" />
+            <RowStyle BackColor="#E3EAEB" />
+            <SelectedRowStyle BackColor="#C5BBAF" Font-Bold="True" ForeColor="#333333" />
+            <SortedAscendingCellStyle BackColor="#F8FAFA" />
+            <SortedAscendingHeaderStyle BackColor="#246B61" />
+            <SortedDescendingCellStyle BackColor="#D4DFE1" />
+            <SortedDescendingHeaderStyle BackColor="#15524A" />
+        </asp:GridView>
+            <br />
+        </div>
+</div>
+        </div>
+    </div>
+
+
+       
+</asp:Content>
+
