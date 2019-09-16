@@ -1,0 +1,135 @@
+<%@ Master Language="C#" AutoEventWireup="true" CodeFile="MasterPage.master.cs" Inherits="MasterPage" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+    <script src="Scripts/jquery-3.4.1.js"></script>
+    <script src="Scripts/metro.js"></script>
+    <link href="Content/metro.css" rel="stylesheet" />
+    <link href="Content/metro-icons.css" rel="stylesheet" />
+    <link href="Content/metro-all.css" rel="stylesheet" />
+    <link href="Content/metro-colors.css" rel="stylesheet" />
+
+
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+    <style type="text/css">
+        .auto-style1 {
+            width: 100%;
+            height: 100%;
+            margin-left: 0px;
+        }
+
+        .auto-style2 {
+            height: 102px;
+            width: 3%;
+        }
+
+        .auto-style5 {
+            height: 102px;
+            width: 58%;
+            font-size: xx-large;
+            color: #006699;
+        }
+
+        .auto-style31 {
+            height: 321px;
+        }
+
+        .auto-style33 {
+            height: 44px;
+        }
+
+        .auto-style39 {
+            height: 102px;
+            width: 5px;
+        }
+
+        .auto-style41 {
+            text-decoration: none;
+        }
+
+        .auto-style42 {
+            color: #006699;
+        }
+
+        .auto-style43 {
+            height: 102px;
+            width: 1%;
+        }
+
+        .auto-style44 {
+            cursor: pointer;
+        }
+
+        .auto-style45 {
+            width: 113px;
+            height: 102px;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="bg-blue fg-white d-flex flex-justify-between app-bar">
+
+         <div class="app-bar-container float-none" >
+
+        <a href="home.aspx" class="app-bar-item pl-4 pr-4">
+            <span class="p-2">
+                <span class="text-bold text-leader">IMS</span>
+            </span>
+        </a>
+
+             <a  class="app-bar-item" href="home.aspx"><span>Home</span></a>
+             <a  class="app-bar-item" href="Product.aspx"><span>Products</span></a>
+             <a  class="app-bar-item" href="Supplier.aspx"><span>Suppliers</span></a>
+             <a  class="app-bar-item" href="Sales.aspx"><span>Sales</span></a>
+              <a  class="app-bar-item" href="Purchase.aspx"><span>Purchases</span></a>
+
+    
+
+    </div>
+
+      <div class="app-bar-container ml-auto">
+            <a href="Logout.aspx"><span class="app-bar-item"><span class=" mif-exit"></span></a>
+        </div>
+
+    </header>
+
+   
+    <form id="form1" runat="server">
+        <div>
+
+            <asp:Label ID="lblusername" runat="server" Font-Size="X-Large" Font-Bold="True" ForeColor="#006699"></asp:Label>
+
+            <asp:Button ID="btnLogOut" Style="border-style: none; border-color: inherit; border-width: medium; background-color: red; color: white; padding: 14px 20px; margin: 8px 0;" runat="server" href="Login.aspx" Text="Logout" OnClick="btnLogOut_Click" CssClass="auto-style44" Width="168px" />
+
+
+            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+            </asp:ContentPlaceHolder>
+
+
+
+        </div>
+    </form>
+
+
+
+    <footer class="container-fluid bg-blue p-4 fg-white pos-fixed pos-bottom-center">
+        <div class="row">
+            <div class="text-center pos-bottom-center">
+                &copy UJ Miniproject 2019
+  
+            </div>
+            <div class="cell-md-6">
+                <!-- ads-html -->
+            </div>
+        </div>
+    </footer>
+
+
+
+</body>
+</html>
