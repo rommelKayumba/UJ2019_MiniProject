@@ -52,26 +52,124 @@
 </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
-    <div align="center" style="background-color:#4caf50;padding:14px 20px">
-        <div  style="margin-top:30px;margin-bottom:20px">
-              
-        </div>
-
-        <div style="margin-top:20px;margin-bottom:20px">
-              <asp:Button ID="Button2" CssClass="button" runat="server" Text="sales" style="left: 33%; top: 46%; width: 329px; height: 68px;" OnClick="Button2_Click" />
+    
+    <div class="=row mt-5 mb-2">
+        <div class="cell" style="text-align:center">
+            <label class="text-bold" id="lblWelcome" runat="server"></label>
 
         </div>
 
-        <div style="margin-top:20px;margin-bottom:20px">
-              <asp:Button ID="Button4" CssClass="button" runat="server"  Text="Products" style="left: 33%; top: 63%; width: 329px; height: 68px;" OnClick="Button4_Click" />
+    </div>
 
+
+    <div class="row ml-3 pos-center pos-fixed">
+
+        <div class="tiles-grid tiles-group">
+
+            <div runat="server"  class="bg-blue" data-role="tile" data-size="medium" data-effect="hover-slide-left" id="btnProduct">
+                <div class="slide-front d-flex flex-justify-center flex-align-center p-4 op-mauve">
+                    <span class="icon mif-apps"></span>
+                </div>
+                <div class="slide-back d-flex flex-justify-center flex-align-center p-4 op-mauve">
+                    <p class="text-center">
+                        View your Components
+                    </p>
+                </div>
+                <span class="branding-bar">Components</span>
+            </div>
+
+            <div runat="server"  class="bg-amazon" data-role="tile" data-size="medium" data-effect="hover-slide-left" id="btnSupplier">
+                <div class="slide-front d-flex flex-justify-center flex-align-center p-4 op-mauve">
+                    <span class="icon mif-truck"></span>
+                </div>
+                <div class="slide-back d-flex flex-justify-center flex-align-center p-4 op-mauve">
+                    <p class="text-center">
+                        View your Suppliers
+                    </p>
+                </div>
+                <span class="branding-bar">Supplier</span>
+            </div>
+            </div>
+
+            <div class="bg-amber" data-role="tile" data-size="medium" data-effect="hover-slide-left" runat="server" id="btnPurchase">
+                <div class="slide-front d-flex flex-justify-center flex-align-center p-4 op-mauve">
+                    <span class="icon mif-cart"></span>
+                </div>
+                <div class="slide-back d-flex flex-justify-center flex-align-center p-4 op-mauve">
+                    <p class="text-center">
+                        View your purchases
+                    </p>
+                </div>
+                <span class="branding-bar">Order</span>
+            </div>
+
+            <div  class="bg-green" data-role="tile" data-size="medium" data-effect="hover-slide-left" runat="server" id ="btnSales">
+                <div class="slide-front d-flex flex-justify-center flex-align-center p-4 op-mauve">
+                    <span class="icon mif-money"></span>
+                </div>
+                <div class="slide-back d-flex flex-justify-center flex-align-center p-4 op-mauve">
+                    <p class="text-center">
+                        View your Sales
+                    </p>
+                </div>
+                <span class="branding-bar">Sales</span>
+            </div>
+
+
+             
+
+
+             <div runat="server" class="bg-pink" data-role="tile" data-size="medium" data-effect="hover-slide-left" id ="btncliens">
+                <div class="slide-front d-flex flex-justify-center flex-align-center p-4 op-mauve">
+                    <span class="icon mif-money"></span>
+                </div>
+                <div class="slide-back d-flex flex-justify-center flex-align-center p-4 op-mauve">
+                    <p class="text-center">
+                        View your All your clients and Orders
+                    </p>
+                </div>
+                <span class="branding-bar">Clients</span>
+            </div>
+
+
+             <div class="bg-yellow" data-role="tile" data-size="medium" data-effect="hover-slide-left" runat="server" id ="btnEntries">
+                <div class="slide-front d-flex flex-justify-center flex-align-center p-4 op-mauve">
+                    <span class="icon mif-money"></span>
+                </div>
+                <div class="slide-back d-flex flex-justify-center flex-align-center p-4 op-mauve">
+                    <p class="text-center">
+                        View your all your entries
+                    </p>
+                </div>
+                <span class="branding-bar">Report</span>
+            </div>
+
+
+             <div class="bg-red" data-role="tile" data-size="medium" data-effect="hover-slide-left" runat="server" id="btnStocks">
+                <div class="slide-front d-flex flex-justify-center flex-align-center p-4 op-mauve">
+                    <span class="icon mif-money"></span>
+                </div>
+                <div class="slide-back d-flex flex-justify-center flex-align-center p-4 op-mauve">
+                    <p class="text-center">
+                        View your all your stocks and update them
+                    </p>
+                </div>
+                <span class="branding-bar">Stocks</span>
+            </div>
+
+
+             <div class="bg-grey" data-role="tile" data-size="medium" data-effect="hover-slide-left"  runat="server" id="btnMatching">
+                <div class="slide-front d-flex flex-justify-center flex-align-center p-4 op-mauve">
+                    <span class=""></span>
+                </div>
+                <div class="slide-back d-flex flex-justify-center flex-align-center p-4 op-mauve">
+                    <p class="text-center">
+                        View your all matching components
+                    </p>
+                </div>
+                <span class="branding-bar">Matching Components</span>
+            </div>
         </div>
 
-        <div style="margin-top:20px;margin-bottom:20px">
-        <asp:Button ID="Button3" CssClass="button" runat="server" Text="Suppliers" style="left: 33%; top: 29%; width: 329px; height: 68px;" OnClick="Button3_Click" />
-
-        </div>
-
-       </div>
 </asp:Content>
 
