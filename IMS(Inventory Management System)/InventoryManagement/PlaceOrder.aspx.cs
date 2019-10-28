@@ -9,8 +9,7 @@ using System.Data;
 
 
 public partial class PlaceOrder : System.Web.UI.Page
-{
-    //connection to the database 
+{//connection to the database 
     static SqlConnection sqlconnection = new SqlConnection(@"Data Source=SQL5045.site4now.net;Initial Catalog=DB_A4D736_uj2019;User Id=DB_A4D736_uj2019_admin;Password=rommel123456;");
 
     //sql commande variable 
@@ -22,20 +21,27 @@ public partial class PlaceOrder : System.Web.UI.Page
     //data set variable 
     DataSet ds;
 
+    public string validator;
+
+
     OrderObj order;
 
     DatabaseHelper dbHelper;
 
     ProductObj tempProductObj;
 
+    string pageFunction;
+
     double totalCost = 0;
     //check user session
     protected void Page_Load(object sender, EventArgs e)
     {
+        pageFunction = Request.QueryString["pageFunction"];
         order = Session["tempOrder"] as OrderObj;
-        if (order == null)
+         if (order == null || pageFunction == null && !IsPostBack)
         {
             order = new OrderObj();
+            Session["tempOrder"] = null;
         }
         if (Session["user"] == null)
         {
@@ -48,7 +54,7 @@ public partial class PlaceOrder : System.Web.UI.Page
             {
                 
                 filldropdownlist();
-                FillGridView();
+                if(order.products != null || order.products.Count > 0) FillGridView();
                 Control LogoutLink = this.Master.FindControl("LogoutLink");
                 LogoutLink.Visible = true;
                 Control userDislay = this.Master.FindControl("usernameDisplay");
@@ -63,7 +69,7 @@ public partial class PlaceOrder : System.Web.UI.Page
             }
 
         }
-
+        
 
     }
 
@@ -75,7 +81,7 @@ public partial class PlaceOrder : System.Web.UI.Page
         try
         {
 
-            SqlCommand sqlCommand = new SqlCommand("Select * FROM Product", sqlconnection);
+            SqlCommand sqlCommand = new SqlCommand("Select * FROM Product WHERE Quantity > 0", sqlconnection);
             sqlconnection.Open();
             SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
             dtbl.Load(sqlDataReader);
@@ -102,11 +108,12 @@ public partial class PlaceOrder : System.Web.UI.Page
     {
         dbHelper = new DatabaseHelper();
         tempProductObj = dbHelper.getProduct(DdList.SelectedValue);
-        //List<int> numberList = Enumerable.Range(1, tempProductObj.inStock).ToList();
-        List<int> numberList = Enumerable.Range(1, 5).ToList();
+        List<int> numberList = Enumerable.Range(1, tempProductObj.inStock).ToList();
+       // List<int> numberList = Enumerable.Range(1, 5).ToList();
         drplstQuantity.DataSource = numberList;
         drplstQuantity.DataBind();
-        lblDescription.Text = tempProductObj.prodcutDescription;
+        txtOthers.Text = tempProductObj.prodcutDescription;
+        txtPrice.Text = tempProductObj.productPrice + "";
         Session["tempProductObj"] = tempProductObj;
     }
 
@@ -114,74 +121,94 @@ public partial class PlaceOrder : System.Web.UI.Page
     //Event to save for any purchase of product by user and update gridview
     protected void btnsave_Click(object sender, EventArgs e)
     {
-        tempProductObj = Session["tempProductObj"] as ProductObj;
+    tempProductObj = Session["tempProductObj"] as ProductObj;
+        List<ProductObj> displayProducts = new List<ProductObj>();
         if (tempProductObj != null)
         {
-            string validator = validateOrder(tempProductObj);
-            if(validator){
+            if(Session["tempOrder"] != null)
+            {
+                 validator = validateOrder(tempProductObj);
+
+            }
+            if (validator != null)
+            {
                 lblerrormessage.Text = validator;
             }
-            else{
+            else
+            {
+                bool newProdcut = true;
+                List<int> originalStocks = new List<int>();
+                List<double> originalPrice = new List<double>();
+
+                //add quantity if user chooses two of the same values
+
+
                 int quantity = Convert.ToInt32(drplstQuantity.SelectedValue);
-                tempProductObj.inStock = quantity;
-                order.products.Add(tempProductObj); //temp holding this
-                order.amounts.Add(quantity);
+
+                
+              
+              
+                
+                
+
+                for (int i = 0; i < order.products.Count; i++)
+                {
+                    if (order.products[i].productId == tempProductObj.productId)
+                    {
+                        newProdcut = false;
+                        displayProducts = order.products;
+                        order.amounts[i] += quantity;
+                        displayProducts[i].productPrice = order.amounts[i] * order.products[i].productPrice;
+                        displayProducts[i].inStock = order.amounts[i];
+                    }
+                }
+
+                if (newProdcut == true)
+                {
+                    order.amounts.Add(quantity);
+                    order.products.Add(tempProductObj); //temp holding this
+                    displayProducts = order.products;
+
+                    //for (int i = 0; i < displayProducts.Count; i++)
+                    //{
+                    int lastItemIdx = displayProducts.Count - 1;
+                    if(lastItemIdx >= 0)
+                    {
+                        displayProducts[lastItemIdx].productPrice = order.amounts[lastItemIdx] * order.products[lastItemIdx].productPrice;
+                        displayProducts[lastItemIdx].inStock = order.amounts[lastItemIdx];
+                    }
+                    //}
+                }
+                //displayProducts = order.products;
+
+                
+
+                //tempProductObj.inStock = quantity;
+                //tempProductObj.productPrice = quantity * tempProductObj.productPrice;
+
+
+                order.orderCost = getCost(order, displayProducts);
+                lblTotalCost.Text = "R" + order.orderCost;
                 Session["tempOrder"] = order;
             }
         }
-        purchaseGrid.DataSource = order.products;
-        purchaseGrid.DataBind(); 
-
-
-        //try
-        //{
-        //    //check connection
-        //    //if closed, open it 
-        //    if (sqlconnection.State == ConnectionState.Closed)
-        //        sqlconnection.Open();
-
-        //    //command to create or update any purchase by executing the appropriate sql proocedure
-        //    SqlCommand sqlcmd = new SqlCommand("PurchaseCreateOrUpdate", sqlconnection);
-        //    sqlcmd.CommandType = CommandType.StoredProcedure;
-        //    sqlcmd.Parameters.AddWithValue("@PurchaseId", hfPurchaseId.Value == "" ? 0 : Convert.ToInt32(hfPurchaseId.Value));
-        //    sqlcmd.Parameters.AddWithValue("@Quantity", Convert.ToInt32(drplstQuantity.Text.Trim()));
-        //    sqlcmd.Parameters.AddWithValue("@Others", txtOthers.Text);
-        //    sqlcmd.ExecuteNonQuery();
-        //    sqlconnection.Close();
-        //    string PurchaseId = hfPurchaseId.Value;
-
-
-        //    if (PurchaseId == "")
-        //        lblsuccessmassage.Text = "Saved Successfully";
-        //    else
-        //        lblsuccessmassage.Text = "Updated Successfully";
-        //    FillGridView();
-        //    clear();
-        //}
-        //catch (Exception ex)
-        //{
-        //    Console.WriteLine(ex.Message);
-        //    lblsuccessmassage.Text = "An Error occured while Saving/Updating the purchase";
-        //}
-
-
+            purchaseGrid.DataSource = displayProducts;
+        purchaseGrid.DataBind();      
 
     }
 
     //function to fill up the gridview
     void FillGridView()
     {
-        //if (sqlconnection.State == ConnectionState.Closed)
-        //    sqlconnection.Open();
+        List<ProductObj> displayProducts = order.products;
+        for(int i = 0; i < displayProducts.Count; i++)
+        {
+            displayProducts[i].productPrice = order.products[i].productPrice * order.amounts[i]; //temp hlding for cost
+        }
 
-
-        //SqlDataAdapter sqlDa = new SqlDataAdapter("ViewPurchaseGrid", sqlconnection);
-        //sqlDa.SelectCommand.CommandType = CommandType.StoredProcedure;
-        //DataTable dtbl = new DataTable();
-        //sqlDa.Fill(dtbl);
-        //sqlconnection.Close();
-        //purchaseGrid.DataSource = dtbl;
-        //purchaseGrid.DataBind();
+        purchaseGrid.DataSource = displayProducts;
+        purchaseGrid.DataBind();
+        lblTotalCost.Text = "R" + order.orderCost;
 
     }
 
@@ -224,10 +251,16 @@ public partial class PlaceOrder : System.Web.UI.Page
         dbHelper = new DatabaseHelper();
         order = Session["tempOrder"] as OrderObj;
         order.userName = Session["user"] as string;
-        order.isActive = 'P';
+        order.isActive = "P";
         order.orderDate = DateTime.Now;
-        dbHelper.saveOrder(order);
-        Session["tempOrder"] = null;
+
+        if(order.orderId != 0)
+        {
+            dbHelper.editOrder(order);
+        } else
+        {
+            dbHelper.saveOrder(order);
+        }
     }
 
     //function that clears all the fields 
@@ -263,17 +296,42 @@ public partial class PlaceOrder : System.Web.UI.Page
 
     }
 
-    private boolean validateOrder(ProductObj product){
-        OrderObj order = Session["tempProd"];
-        List<ProductObj> products = order.products; 
-        List<string> compatibilityRules = getExistingRules(product.productId);
-        foreach(ProductObj product in products){
-            int foundIndex = compatibilityRules.FindIndex(product.productId);
-            if(foundIndex >= 0){
-                return "Cannot Order " + getProduct(compatibilityRules[foundIndex]).productName + " with " + product.productName;
+    private string validateOrder(ProductObj product)
+    {
+        dbHelper = new DatabaseHelper();
+        OrderObj order = Session["tempOrder"] as OrderObj;
+        List<ProductObj> products = order.products;
+        List<string> compatibilityRules = dbHelper.getExistingRules(product.productId + "");
+        foreach (ProductObj Iproduct in products)
+        {
+           if(compatibilityRules.Count > 0)
+            {
+                for (int i = 0; i < compatibilityRules.Count; i++)
+                {
+                    if (Iproduct.productName == compatibilityRules[i])
+                    {
+
+                        return "You can not order " + dbHelper.getProductByName(compatibilityRules[i]).productName + " with " + product.productName;
+
+                    }
+                }
             }
         }
         return null;
+    }
 
+    private double getCost(OrderObj order, List<ProductObj> displayProduct)
+    {
+       if(order.products.Count > 0)
+        {
+            List<ProductObj> products = order.products;
+            List<int> amounts = order.amounts;
+            for (int i = 0; i < order.products.Count; i++)
+            {
+                totalCost += products[i].productPrice;
+            }
+        }
+       
+        return totalCost;
     }
 }
