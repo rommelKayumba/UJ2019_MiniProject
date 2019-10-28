@@ -12,6 +12,9 @@ public partial class Order : System.Web.UI.Page
     
     protected void Page_Load(object sender, EventArgs e)
     {
-        
+         string level = Session["level"] as string;
+
+           
+        FillGridView();
     }
 }
