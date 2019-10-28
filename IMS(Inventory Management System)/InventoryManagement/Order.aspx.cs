@@ -35,4 +35,23 @@ public partial class Order : System.Web.UI.Page
         dbHelper.setActiveOfOrder(tempOrder);
         Page.Response.Redirect(Page.Request.Url.ToString(), true);
     }
+    
+     protected void lnk_process(object sender, EventArgs e)
+    {
+        dbHelper = new DatabaseHelper();
+        int orderId = Convert.ToInt32((sender as LinkButton).CommandArgument);
+        OrderObj tempOrder = dbHelper.getOrderById(orderId);
+        tempOrder.isActive = "A";
+        dbHelper.setActiveOfOrder(tempOrder);
+        List<ProductObj> tempProducts = tempOrder.products;
+        for (int i = 0; i < tempProducts.Count; i++) { 
+            ProductObj tempProduct = tempProducts[i];
+            tempProduct.inStock -= tempOrder.amounts[i];
+            dbHelper.editProduct(tempProducts[i]);
+        }
+
+        Page.Response.Redirect(Page.Request.Url.ToString(), true);
+    }
+
+    
 }
