@@ -8,7 +8,15 @@ public partial class Login : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
+       Control LogoutLink = this.Master.FindControl("LogoutLink");
 
+        LogoutLink.Visible = false;
+
+        Control userDislay = this.Master.FindControl("usernameDisplay");
+
+        var user = (Label)Master.FindControl("usernameDisplay");
+
+        user.Text = "";
     }
 
     protected void btnLogin_Click(object sender, EventArgs e)
