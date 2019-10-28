@@ -9,7 +9,8 @@ using System.Data;
 
 
 public partial class PlaceOrder : System.Web.UI.Page
-{//connection to the database 
+{
+    //connection to the database 
     static SqlConnection sqlconnection = new SqlConnection(@"Data Source=SQL5045.site4now.net;Initial Catalog=DB_A4D736_uj2019;User Id=DB_A4D736_uj2019_admin;Password=rommel123456;");
 
     //sql commande variable 
