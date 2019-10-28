@@ -17,4 +17,12 @@ public partial class Order : System.Web.UI.Page
            
         FillGridView();
     }
+     protected void lnk_edit(object sender, EventArgs e)
+    {
+        dbHelper = new DatabaseHelper();
+        int orderId = Convert.ToInt32((sender as LinkButton).CommandArgument);
+        OrderObj tempOrder = dbHelper.getOrderById(orderId);
+        Session["tempOrder"] = tempOrder;
+        Response.Redirect("PlaceOrder.aspx?pageFunction=E");
+    }
 }
