@@ -50,23 +50,41 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
 
-    <div class="container mt-3 ">
-    <h1 class="text-center fg-black">Clients Orders</h1>
-    <h3 class="text-center">With sorting and filtering</h3>
+    <div class="bg-white p-6 mx-auto border bd-default win-shadow cell w-60 position-bottom mt-4 ml-8-xl">
 
-    <div class="d-flex flex-justify-center" id="activity">
-        <div data-role="activity" data-type="cycle" data-style="color"></div>
-    </div>
+                <h3 class="text-bold text-medium fg-blue">Orders </h3>
+                <asp:GridView CssClass="table" ID="productGrid" runat="server" AutoGenerateColumns="False" HorizontalAlign="Center" CellPadding="5" CellSpacing="5" ForeColor="#333333" GridLines="None" Height="205px" Width="501px">
+                    <AlternatingRowStyle BackColor="White" />
+                    <Columns>
+                        <asp:BoundField DataField="orderId" HeaderText="Order Number" />
+                        <asp:BoundField DataField="userName" HeaderText="Customer" />
+                        <asp:BoundField DataField="isActive" HeaderText="State" />
+                        <asp:BoundField DataField="orderDate" HeaderText="Oder Date" />
+                        <asp:TemplateField HeaderText="editTemplate" ShowHeader="False" runat="server">
+                            <ItemTemplate>
+                                   <asp:LinkButton CssClass="button outline primary" ID="lnkEdit" runat="server" CommandArgument='<%# Eval("orderId") %>' OnClick="lnk_edit">Edit/View</asp:LinkButton>
+                               
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        <asp:TemplateField ShowHeader="False">
+                            <ItemTemplate>
+                               <asp:LinkButton CssClass="button outline primary warning" ID="lnkCancel" runat="server" CommandArgument='<%# Eval("orderId") %>' OnClick="lnk_cancel">Cancel</asp:LinkButton>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                    </Columns>
+                    <EditRowStyle BackColor="#7C6F57" />
+                    <FooterStyle BackColor="#1C5E55" Font-Bold="True" ForeColor="White" />
+                    <HeaderStyle BackColor="Green" Font-Bold="True" ForeColor="White" />
+                    <PagerStyle BackColor="#666666" ForeColor="White" HorizontalAlign="Center" />
+                    <RowStyle BackColor="#E3EAEB" />
+                    <SelectedRowStyle BackColor="#C5BBAF" Font-Bold="True" ForeColor="#333333" />
+                    <SortedAscendingCellStyle BackColor="#F8FAFA" />
+                    <SortedAscendingHeaderStyle BackColor="#246B61" />
+                    <SortedDescendingCellStyle BackColor="#D4DFE1" />
+                    <SortedDescendingHeaderStyle BackColor="#15524A" />
+                </asp:GridView>
+                <br />
 
-        <table class="table striped table-border mt-4"
-           data-role="table"
-           data-cls-component="mt-10"
-           data-rows="10"
-           data-source="table-100k.json"
-           data-pagination="true"
-           data-show-all-pages="false"
-           data-on-data-loaded="$('#activity').remove()"
-    ></table>
-  </div>
+            </div>
 </asp:Content>
 
