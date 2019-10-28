@@ -53,5 +53,27 @@ public partial class Order : System.Web.UI.Page
         Page.Response.Redirect(Page.Request.Url.ToString(), true);
     }
 
+ void FillGridView()
+    {
+
+
+        List<OrderObj> orders = new List<OrderObj>();
+        dbHelper = new DatabaseHelper();
+        string level = Session["level"] as string;
+        if(level == "Admin")
+        {
+            orders = dbHelper.getAllOrders();
+        }
+        if(level == "Customer")
+        {
+            orders = dbHelper.getOrdersByUserId(Session["user"] as string);
+        }
+        if (orders.Count > 0)
+        {
+            productGrid.DataSource = orders;
+            productGrid.DataBind();
+        }
+
+    }
     
 }
