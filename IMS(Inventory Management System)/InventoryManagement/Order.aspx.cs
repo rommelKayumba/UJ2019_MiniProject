@@ -25,4 +25,14 @@ public partial class Order : System.Web.UI.Page
         Session["tempOrder"] = tempOrder;
         Response.Redirect("PlaceOrder.aspx?pageFunction=E");
     }
+    
+     protected void lnk_cancel(object sender, EventArgs e)
+    {
+        dbHelper = new DatabaseHelper();
+        int orderId = Convert.ToInt32((sender as LinkButton).CommandArgument);
+        OrderObj tempOrder = dbHelper.getOrderById(orderId);
+        tempOrder.isActive ="C";
+        dbHelper.setActiveOfOrder(tempOrder);
+        Page.Response.Redirect(Page.Request.Url.ToString(), true);
+    }
 }
