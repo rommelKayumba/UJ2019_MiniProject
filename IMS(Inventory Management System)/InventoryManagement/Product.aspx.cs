@@ -65,10 +65,7 @@ public partial class Product : System.Web.UI.Page
         DropDownProduct.DataValueField = "ProductId";
         DropDownProduct.DataBind();
 
-        /*
-         * SUpliers list
-         * with select event
-         */
+       
             string supplierquery = "SELECT SupplierId,CompanyName FROM Supplier";
             cmd = new SqlCommand(supplierquery, sqlconnection);
             da = new SqlDataAdapter(cmd);
@@ -102,11 +99,7 @@ public partial class Product : System.Web.UI.Page
         
     }
 
-    /*
-     * This event update the gridview
-     * when user add a new product
-     * by filling in the name of the product and description about it 
-     */
+   
     protected void btnsave_Click(object sender, EventArgs e)
     {
 
