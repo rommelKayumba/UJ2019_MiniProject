@@ -11,7 +11,13 @@ public partial class Product : System.Web.UI.Page
 {
     //connection to the database 
     static SqlConnection sqlconnection = new SqlConnection(@"Data Source=SQL5045.site4now.net;Initial Catalog=DB_A4D736_uj2019;User Id=DB_A4D736_uj2019_admin;Password=rommel123456;");
-
+        //sql commande variable 
+    SqlCommand cmd;
+     //sql adatpter variable 
+    SqlDataAdapter da;
+     //data set variable 
+    DataSet ds;
+    
     protected void Page_Load(object sender, EventArgs e)
     {
         //check the session
@@ -20,9 +26,24 @@ public partial class Product : System.Web.UI.Page
             Response.Redirect("Login.aspx");
         }
         else if (!IsPostBack)
-        {
-            btndelete.Enabled = false;
-            FillGridView();
+        { try
+            {
+                filldropdownlist();
+                FillGridView();
+                Control LogoutLink = this.Master.FindControl("LogoutLink");
+                LogoutLink.Visible = true;
+                Control userDislay = this.Master.FindControl("usernameDisplay");
+                var user = (Label)Master.FindControl("usernameDisplay");
+                user.Text = Session["user"].ToString();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+
+                lblsuccessmassage.Text = "An Error occured while retrieving the Purchase List";
+            }
+
+        }
         }
     }
 
