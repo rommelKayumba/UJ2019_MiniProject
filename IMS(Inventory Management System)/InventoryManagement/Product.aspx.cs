@@ -44,7 +44,45 @@ public partial class Product : System.Web.UI.Page
             }
 
         }
-        }
+        
+    }
+
+ protected void filldropdownlist()
+    {
+        //check connection state. if closed, open it 
+        if (sqlconnection.State == ConnectionState.Closed)
+            sqlconnection.Open();
+        
+        
+        //Product drop down list
+        string productquery = "SELECT ProductId,ProductName FROM Product";
+        cmd = new SqlCommand(productquery, sqlconnection);
+        da = new SqlDataAdapter(cmd);
+        ds = new DataSet();
+        da.Fill(ds, "product");
+        DropDownProduct.DataSource = ds.Tables["product"];
+        DropDownProduct.DataTextField = "ProductName";
+        DropDownProduct.DataValueField = "ProductId";
+        DropDownProduct.DataBind();
+
+        /*
+         * SUpliers list
+         * with select event
+         */
+            string supplierquery = "SELECT SupplierId,CompanyName FROM Supplier";
+            cmd = new SqlCommand(supplierquery, sqlconnection);
+            da = new SqlDataAdapter(cmd);
+            ds = new DataSet();
+            da.Fill(ds, "supplier");
+            DropDownSupplier.DataSource = ds.Tables["supplier"];
+            DropDownSupplier.DataTextField = "CompanyName";
+            DropDownSupplier.DataValueField = "SupplierId";
+            DropDownSupplier.DataBind();
+
+        ///close connection
+        sqlconnection.Close();
+
+
     }
 
     protected void btnclear_Click(object sender, EventArgs e)
